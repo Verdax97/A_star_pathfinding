@@ -87,6 +87,7 @@ if __name__ == "__main__":
     while True:
         if len(todo) == 0:
             print("no path found")
+            printalo(inp, todo, done)
             break
         look = todo.pop(0)
         if inp[look.y][look.x] == 'f':
