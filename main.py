@@ -62,7 +62,7 @@ def printalo(inp, todo, done, path = None):
     for y in range(0, len(inp)):
         for x in range(0, len(inp[y])):
             if inp[y][x] == 's' or inp[y][x] == 'f':
-                print(Fore.CYAN, end = '')
+                print(Back.CYAN, end = '')
             if existInside(todo, x, y):
                 print(Back.YELLOW, end = '')
             if existInside(done, x, y):
@@ -111,6 +111,6 @@ if __name__ == "__main__":
             #check down
             if look.y + 1 < len(inp) and inp[look.y + 1][look.x] != "x" and insertQuestion(todo, done, look.x, look.y + 1):
                 bisect.insort_left(todo, Cell(look.x, look.y + 1, measureWeight(s, f, look.x, look.y + 1), look))
-        printalo(inp, todo, done)
-        time.sleep(0.05)
-        #input((todo, done))
+        if len(sys.argv) > 2 and sys.argv[2] == "-d":
+            printalo(inp, todo, done)
+            time.sleep(0.01)
