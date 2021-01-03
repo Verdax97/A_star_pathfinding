@@ -1,5 +1,5 @@
 from os import system, name
-import sys
+import argparse
 import bisect
 import time
 from colorama import Fore, Back, Style
@@ -57,7 +57,7 @@ def insertQuestion(inp, ext, x, y):
             return False
     return True
 
-def printalo(inp, todo, done, path = None):
+def printMaze(inp, todo, done, path = None):
     clear()
     for y in range(0, len(inp)):
         for x in range(0, len(inp[y])):
@@ -75,7 +75,13 @@ def printalo(inp, todo, done, path = None):
     print(Style.RESET_ALL, end = '')
 
 if __name__ == "__main__":
-    with open("inputs/" + sys.argv[1]+".txt") as f:
+    #setting up arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('name', type = str, help='name of the file')
+    parser.add_argument('-d', '--display', action='store_true', help='display every step of the search')
+    args = parser.parse_args()
+    #open file
+    with open("inputs/" + args.name +".txt") as f:
         inp = f.read().splitlines()
     #ordered array
     todo = list()
@@ -87,7 +93,7 @@ if __name__ == "__main__":
     while True:
         if len(todo) == 0:
             print("no path found")
-            printalo(inp, todo, done)
+            printMaze(inp, todo, done)
             break
         look = todo.pop(0)
         if inp[look.y][look.x] == 'f':
@@ -96,7 +102,7 @@ if __name__ == "__main__":
             while look != None:
                 a.append(look)
                 look = look.prec
-            printalo(inp, todo, done, a)
+            printMaze(inp, todo, done, a)
             break
         if look not in done:
             done.append(look)
@@ -112,6 +118,6 @@ if __name__ == "__main__":
             #check down
             if look.y + 1 < len(inp) and inp[look.y + 1][look.x] != "x" and insertQuestion(todo, done, look.x, look.y + 1):
                 bisect.insort_left(todo, Cell(look.x, look.y + 1, measureWeight(s, f, look.x, look.y + 1), look))
-        if len(sys.argv) > 2 and sys.argv[2] == "-d":
-            printalo(inp, todo, done)
+        if args.display:
+            printMaze(inp, todo, done)
             time.sleep(0.01)
